@@ -3153,6 +3153,18 @@
         return fallbackReply(raw);
       }
 
+      // ============================================================
+      // BACKEND CONFIG — points B.E.R.U at your Render service.
+      // ============================================================
+      // IMPORTANT: replace the URL below with your actual Render URL.
+      // It should look like: https://beru-something.onrender.com
+      // Do NOT include a trailing slash.
+      const BERU_BACKEND_URL = "https://YOUR-RENDER-APP.onrender.com";
+
+      // Conversation history sent to the backend so B.E.R.U remembers
+      // earlier turns within the same chat session.
+      const beruHistory = [];
+
       function addMsg(html, who) {
         const el = document.createElement('div');
         el.className = 'msg ' + who;
@@ -3171,16 +3183,75 @@
         return el;
       }
 
-      function send(text) {
+      // Convert plain-text replies from the backend into safe HTML —
+      // preserves line breaks, escapes any stray tags, leaves links alone.
+      function formatReply(text) {
+        if (!text) return '';
+        // Escape HTML special characters first.
+        const escaped = text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        // Convert URLs to clickable links.
+        const linked = escaped.replace(
+          /(https?:\/\/[^\s<]+)/g,
+          '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+        );
+        // Convert newlines to <br> for readability.
+        return linked.replace(/\n/g, '<br>');
+      }
+
+      async function send(text) {
         if (!text || !text.trim()) return;
         addMsg(text.replace(/</g, '&lt;'), 'user');
         input.value = '';
-        const t = addTyping();
-        const delay = 500 + Math.random() * 600;
-        setTimeout(() => {
-          t.remove();
-          addMsg(lookup(text), 'bot');
-        }, delay);
+        const typingBubble = addTyping();
+
+        // Push the user message into history immediately so the backend
+        // sees it as part of the conversation.
+        beruHistory.push({ role: 'user', content: text });
+
+        // Try the live backend first. Only fall back to the local KB if
+        // the backend is unreachable or returns an error.
+        let reply = null;
+        let usedFallback = false;
+
+        try {
+          const res = await fetch(BERU_BACKEND_URL + '/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: beruHistory })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            reply = data && data.reply ? data.reply : null;
+          } else {
+            console.warn('B.E.R.U backend returned', res.status);
+          }
+        } catch (err) {
+          console.warn('B.E.R.U backend unreachable, using local fallback:', err);
+        }
+
+        // Local KB fallback if the backend gave us nothing usable.
+        if (!reply) {
+          reply = lookup(text);
+          usedFallback = true;
+        }
+
+        // Remove the typing bubble before showing the reply.
+        typingBubble.remove();
+
+        // Backend replies are plain text — format them. The local fallback
+        // returns HTML already (rich KB entries with <strong>, <ul> etc.).
+        if (usedFallback) {
+          addMsg(reply, 'bot');
+        } else {
+          addMsg(formatReply(reply), 'bot');
+          // Save B.E.R.U's reply into history so the next user turn has
+          // proper conversational context.
+          beruHistory.push({ role: 'assistant', content: reply });
+        }
       }
 
       // Open / close
