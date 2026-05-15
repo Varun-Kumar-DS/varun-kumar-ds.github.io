@@ -922,6 +922,277 @@
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
   }
 
+  /* ============ RESUME SECTION ============ */
+
+  .resume-block {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 40px;
+    padding: 44px 44px;
+    border: 1px solid var(--line-strong);
+    background:
+      radial-gradient(circle at 90% 10%, rgba(185, 165, 255, 0.10), transparent 50%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01));
+    backdrop-filter: blur(12px);
+    clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+    overflow: hidden;
+    align-items: center;
+  }
+
+  @media (max-width: 880px) {
+    .resume-block {
+      grid-template-columns: 1fr;
+      padding: 32px 28px;
+      gap: 28px;
+    }
+    .resume-right { order: -1; }
+  }
+
+  .resume-label {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .resume-label .pulse-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    animation: dot-pulse 1.6s ease-in-out infinite;
+  }
+
+  .resume-headline {
+    font-family: var(--f-display);
+    font-size: clamp(2rem, 4.2vw, 3.4rem);
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 16px;
+    letter-spacing: 0.005em;
+  }
+  .resume-headline .hl-accent {
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .resume-sub {
+    font-size: 1.08rem;
+    line-height: 1.6;
+    color: var(--white-dim);
+    max-width: 56ch;
+    margin-bottom: 28px;
+  }
+
+  .resume-cta-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  /* Primary download button — big, bold, white */
+  .resume-cta-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 26px 18px 24px;
+    background: var(--white);
+    color: var(--bg-void);
+    text-decoration: none;
+    border: 1.5px solid var(--white);
+    font-family: var(--f-mono);
+    text-transform: uppercase;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+    overflow: hidden;
+  }
+  .resume-cta-primary .rc-text {
+    font-size: 14px;
+    letter-spacing: 0.22em;
+    font-weight: 700;
+  }
+  .resume-cta-primary .rc-meta {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(4, 0, 12, 0.55);
+    padding: 4px 10px;
+    border: 1px solid rgba(4, 0, 12, 0.3);
+  }
+  .resume-cta-primary .rc-icon {
+    width: 20px; height: 20px;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .resume-cta-primary::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(185, 165, 255, 0.35), transparent);
+    transition: left 0.5s ease;
+  }
+  .resume-cta-primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg-void);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(185, 165, 255, 0.4);
+  }
+  .resume-cta-primary:hover::before { left: 100%; }
+  .resume-cta-primary:hover .rc-icon { transform: translateY(3px); }
+
+  /* Secondary ghost button */
+  .resume-cta-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 22px;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid var(--line-strong);
+    font-family: var(--f-mono);
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  }
+  .resume-cta-ghost svg { width: 16px; height: 16px; }
+  .resume-cta-ghost:hover {
+    border-color: var(--white);
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+  }
+
+  /* CV mock thumbnail (right side) */
+  .cv-mock {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1.414;     /* A4 ratio */
+    padding: 22px 18px;
+    background: linear-gradient(180deg, rgba(20, 14, 36, 0.7), rgba(8, 5, 18, 0.85));
+    border: 1px solid var(--line-strong);
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s;
+    transform: rotate(-2deg);
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(185, 165, 255, 0.05),
+      inset 0 0 60px rgba(185, 165, 255, 0.04);
+  }
+  .resume-block:hover .cv-mock {
+    transform: rotate(0deg) translateY(-4px);
+    box-shadow:
+      0 18px 44px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(185, 165, 255, 0.15),
+      0 0 32px rgba(185, 165, 255, 0.15);
+  }
+
+  .cv-mock-corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--accent);
+    opacity: 0.7;
+  }
+  .cv-mock-corner.tl { top: 6px; left: 6px; border-top: 1.5px solid; border-left: 1.5px solid; }
+  .cv-mock-corner.tr { top: 6px; right: 6px; border-top: 1.5px solid; border-right: 1.5px solid; }
+  .cv-mock-corner.bl { bottom: 6px; left: 6px; border-bottom: 1.5px solid; border-left: 1.5px solid; }
+  .cv-mock-corner.br { bottom: 6px; right: 6px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+
+  .cv-mock-header {
+    margin-bottom: 16px;
+    padding-top: 4px;
+  }
+  .cv-mock-name {
+    font-family: var(--f-display);
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  .cv-mock-role {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .cv-mock-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0.5;
+  }
+
+  .cv-mock-body {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .cv-line {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 1px;
+  }
+  .cv-line.w90 { width: 92%; }
+  .cv-line.w85 { width: 85%; }
+  .cv-line.w80 { width: 80%; }
+  .cv-line.w75 { width: 75%; }
+  .cv-line.w70 { width: 70%; }
+  .cv-line.w65 { width: 65%; }
+  .cv-line.w60 { width: 60%; }
+  .cv-line.w55 { width: 55%; }
+  .cv-line.w50 { width: 50%; }
+
+  .cv-section-title {
+    margin-top: 10px;
+    font-family: var(--f-mono);
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .cv-mock-pdf-tag {
+    position: absolute;
+    top: -10px;
+    right: 14px;
+    padding: 4px 9px;
+    background: var(--accent);
+    color: var(--bg-void);
+    font-family: var(--f-mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(185, 165, 255, 0.4);
+    transform: rotate(2deg);
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .resume-block:hover .cv-mock-pdf-tag {
+    transform: rotate(0deg) translateY(-2px);
+  }
+
+  /* Highlight pulse when user is sent here from the side rail */
+  @keyframes resume-highlight {
+    0%   { box-shadow: 0 0 0 1px var(--line-strong), 0 0 0 0 rgba(185, 165, 255, 0); }
+    30%  { box-shadow: 0 0 0 2px var(--accent), 0 0 60px 20px rgba(185, 165, 255, 0.35); }
+    100% { box-shadow: 0 0 0 1px var(--line-strong), 0 0 0 0 rgba(185, 165, 255, 0); }
+  }
+  .resume-block.flash {
+    animation: resume-highlight 1.8s ease-out;
+  }
+
   /* ============ CONNECT CTA ============ */
 
   .connect {
@@ -1031,20 +1302,6 @@
     background: var(--accent);
     color: var(--bg-void);
     box-shadow: 0 8px 24px rgba(185, 165, 255, 0.25);
-    transform: translateY(-2px);
-  }
-
-  /* Resume CTA — distinct outlined white treatment */
-  .cn-cta.resume-cta {
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--white);
-    border-color: var(--white);
-    border-width: 1.5px;
-  }
-  .cn-cta.resume-cta:hover {
-    background: var(--white);
-    color: var(--bg-void);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.25);
     transform: translateY(-2px);
   }
 
@@ -1644,10 +1901,10 @@
       <span class="tip">Contact</span>
     </button>
     <div class="rail-divider"></div>
-    <a class="rail-btn resume" href="Varun_Kumar-Resume.pdf" download aria-label="Download Resume">
+    <button class="rail-btn resume" data-target="sec-resume" aria-label="Resume">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
-      <span class="tip">Download CV</span>
-    </a>
+      <span class="tip">Resume</span>
+    </button>
     <button class="rail-btn hire" data-target="sec-contact" aria-label="Hire me">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
       <span class="tip">Hire Me</span>
@@ -1998,10 +2255,73 @@
       </div>
     </section>
 
+    <!-- RESUME -->
+    <section class="reveal d7 scene" id="sec-resume">
+      <div class="sec-head">
+        <span class="idx">07</span>
+        <span>/ RESUME</span>
+        <span class="tag-bit">DOWNLOADABLE</span>
+        <span class="bar"></span>
+      </div>
+
+      <div class="resume-block">
+        <div class="resume-left">
+          <div class="resume-label"><span class="pulse-dot"></span> CV.v2026 // READY</div>
+          <h2 class="resume-headline">Want a copy of my CV?<br><span class="hl-accent">Grab it here.</span></h2>
+          <p class="resume-sub">
+            Single-page PDF. Everything from this portfolio in a recruiter-friendly format — projects, skills, education, the lot. Print it, share it, email it on. Yours to keep.
+          </p>
+
+          <div class="resume-cta-row">
+            <a class="resume-cta-primary" href="Varun_Kumar-Resume.pdf" download="Varun_Kumar-Resume.pdf">
+              <span class="rc-text">Download CV</span>
+              <span class="rc-meta">PDF · ~110 KB</span>
+              <svg class="rc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
+            </a>
+            <a class="resume-cta-ghost" href="Varun_Kumar-Resume.pdf" target="_blank" rel="noopener noreferrer">
+              <span>View in browser</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="resume-right">
+          <!-- Stylised CV thumbnail rendered in HTML/CSS — matches the HUD aesthetic -->
+          <div class="cv-mock" aria-hidden="true">
+            <div class="cv-mock-corner tl"></div>
+            <div class="cv-mock-corner tr"></div>
+            <div class="cv-mock-corner bl"></div>
+            <div class="cv-mock-corner br"></div>
+            <div class="cv-mock-header">
+              <div class="cv-mock-name">VARUN KUMAR R</div>
+              <div class="cv-mock-role">Junior Data Science &amp; AI Engineer</div>
+              <div class="cv-mock-divider"></div>
+            </div>
+            <div class="cv-mock-body">
+              <div class="cv-line w90"></div>
+              <div class="cv-line w70"></div>
+              <div class="cv-line w85"></div>
+              <div class="cv-section-title">EXPERIENCE</div>
+              <div class="cv-line w75"></div>
+              <div class="cv-line w60"></div>
+              <div class="cv-section-title">PROJECTS</div>
+              <div class="cv-line w80"></div>
+              <div class="cv-line w65"></div>
+              <div class="cv-line w70"></div>
+              <div class="cv-section-title">SKILLS</div>
+              <div class="cv-line w55"></div>
+              <div class="cv-line w50"></div>
+            </div>
+            <div class="cv-mock-pdf-tag">PDF</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CONNECT / CONTACT -->
     <section class="reveal d7 scene" id="sec-contact">
       <div class="sec-head">
-        <span class="idx">07</span>
+        <span class="idx">08</span>
         <span>/ LET'S CONNECT</span>
         <span class="tag-bit">OPEN CHANNEL</span>
         <span class="bar"></span>
@@ -2018,10 +2338,6 @@
           <a class="cn-cta primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=varunkumarrameshkumar085@gmail.com&su=Hello+Varun" target="_blank" rel="noopener noreferrer">
             Email me
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
-          <a class="cn-cta resume-cta" href="Varun_Kumar-Resume.pdf" download>
-            Download CV
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
           </a>
           <a class="cn-cta accent" href="https://www.linkedin.com/in/varun-kumar-r-64a311325" target="_blank" rel="noopener">
             LinkedIn
@@ -2141,18 +2457,31 @@
         const sec = document.getElementById(id);
         if (sec) sectionMap[id] = sec;
         b.addEventListener('click', () => {
-          const sec = document.getElementById(b.dataset.target);
+          const target = b.dataset.target;
+          const sec = document.getElementById(target);
           if (!sec) return;
-          // If it's the "Hire me" shortcut, also pop the chat after scroll
-          // for a nicer feel, otherwise just scroll.
           const top = sec.getBoundingClientRect().top + window.pageYOffset - 32;
           window.scrollTo({ top, behavior: 'smooth' });
+
+          // When the user clicks the Resume button in the side rail, scroll
+          // them to the resume section AND flash the panel so it's obvious
+          // they landed in the right place. They get to choose download or
+          // view-in-browser from inside that section.
+          if (target === 'sec-resume') {
+            const block = sec.querySelector('.resume-block');
+            if (block) {
+              block.classList.remove('flash');
+              // Force reflow so the animation can be retriggered.
+              void block.offsetWidth;
+              block.classList.add('flash');
+            }
+          }
         });
       });
 
       // Scroll-spy: mark the button whose section is closest to the viewport top.
       const spyTargets = Array.from(buttons)
-        .filter(b => !b.classList.contains('hire') && !b.classList.contains('resume'))
+        .filter(b => !b.classList.contains('hire'))
         .map(b => ({ btn: b, sec: sectionMap[b.dataset.target] }))
         .filter(o => o.sec);
 
