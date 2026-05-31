@@ -1887,6 +1887,224 @@
     .beru-panel { right: 12px; left: 12px; bottom: 12px; width: auto; max-width: none; height: 70vh; }
     .beru-launcher { right: 12px; bottom: 12px; }
   }
+
+  /* ============================================================
+     MOBILE & TABLET RESPONSIVE OVERRIDES
+     Breakpoints: tablet ≤ 768px · mobile ≤ 480px
+  ============================================================ */
+
+  /* --- Shell & global spacing --- */
+  @media (max-width: 768px) {
+    .shell {
+      padding: 20px 18px 100px; /* bottom pad clears the bottom nav rail */
+    }
+    section.scene, .hero { margin-bottom: 40px; }
+  }
+
+  /* --- Side rail → becomes bottom tab bar on mobile --- */
+  @media (max-width: 768px) {
+    .side-rail {
+      position: fixed;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      transform: none;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 8px 10px;
+      gap: 4px;
+      background: rgba(250, 248, 244, 0.96);
+      border-top: 1px solid var(--line-mid);
+      border-right: none;
+      border-radius: 0;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 -4px 16px rgba(31, 30, 28, 0.08);
+      z-index: 100;
+      width: 100%;
+    }
+    .side-rail .rail-divider {
+      display: none; /* hide vertical dividers in row layout */
+    }
+    .rail-btn {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+    .rail-btn .tip { display: none; }
+  }
+
+  /* --- Hero: stack on mobile, limit photo height --- */
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .id-module {
+      padding: 20px;
+    }
+    .portrait-frame {
+      max-width: 260px;
+      margin: 0 auto;
+    }
+    .hex-outer {
+      width: 88%;
+      aspect-ratio: 5 / 7; /* slightly less tall on mobile */
+    }
+
+    /* Name & subtitle scale down */
+    .id-name {
+      font-size: clamp(2.4rem, 10vw, 3.5rem);
+      line-height: 1.0;
+    }
+    .id-subtitle {
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+    }
+    .id-summary {
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    /* Stat bar: 3 cols → 2 on small mobile is already handled, keep 3 on tablet */
+    .stat-bar {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .id-module { padding: 16px; }
+    .portrait-frame { max-width: 220px; }
+    .stat-bar { grid-template-columns: repeat(3, 1fr); gap: 0; }
+    .stat { padding: 0 10px; }
+  }
+
+  /* --- Marquee: smaller text on mobile --- */
+  @media (max-width: 768px) {
+    .marquee-item {
+      font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+      padding: 0 16px;
+    }
+    .marquee-sep {
+      font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+    }
+  }
+
+  /* --- Section headings --- */
+  @media (max-width: 768px) {
+    .sec-title {
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      margin-bottom: 20px;
+    }
+    .sec-head {
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+    }
+    .tag-bit { display: none; } /* hide decorative tag on mobile */
+  }
+
+  /* --- Objective block --- */
+  @media (max-width: 768px) {
+    .objective {
+      flex-direction: column;
+      gap: 14px;
+      padding: 20px;
+    }
+    .objective .txt {
+      font-size: 1rem;
+    }
+  }
+
+  /* --- Grids (education, projects, certs) --- */
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 14px; }
+    .arsenal { grid-template-columns: 1fr; gap: 14px; }
+  }
+
+  /* --- Project cards --- */
+  @media (max-width: 768px) {
+    .panel {
+      padding: 20px;
+    }
+  }
+
+  /* --- Roadmap --- */
+  @media (max-width: 768px) {
+    .roadmap-grid { grid-template-columns: 1fr; gap: 14px; }
+  }
+
+  /* --- Resume block --- */
+  @media (max-width: 768px) {
+    .resume-block {
+      grid-template-columns: 1fr;
+      padding: 24px 20px;
+      gap: 24px;
+    }
+    .resume-right { order: -1; }
+    .cv-mock {
+      max-width: 240px;
+    }
+    .resume-headline {
+      font-size: clamp(1.7rem, 6vw, 2.6rem);
+    }
+    .resume-cta-row {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .resume-cta-primary, .resume-cta-ghost {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  /* --- Connect / Contact --- */
+  @media (max-width: 768px) {
+    .connect {
+      padding: 24px 20px;
+    }
+    .cn-title {
+      font-size: clamp(1.8rem, 7vw, 2.8rem) !important;
+    }
+    .cn-cta-row {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cn-cta {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+    }
+    .cn-grid {
+      grid-template-columns: 1fr !important;
+      gap: 14px;
+    }
+  }
+
+  /* --- B.E.R.U panel safe area on mobile --- */
+  @media (max-width: 768px) {
+    .beru-launcher {
+      bottom: 70px; /* sit above the bottom nav rail */
+    }
+    .beru-panel {
+      bottom: 70px;
+    }
+  }
+
+  /* --- Overflow safety net --- */
+  @media (max-width: 768px) {
+    html, body { overflow-x: hidden; }
+    .panel, .id-panel, .connect, .objective, .resume-block {
+      word-break: break-word;
+    }
+    img { max-width: 100%; }
+  }
+
 </style>
 </head>
 
