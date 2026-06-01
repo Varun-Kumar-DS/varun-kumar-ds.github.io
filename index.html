@@ -1429,16 +1429,6 @@
     transform: scale(1);
   }
 
-  /* On mobile and tablet — disable the dimming effect entirely so sections stay fully readable */
-  @media (max-width: 960px) {
-    .scene {
-      opacity: 1 !important;
-      filter: none !important;
-      transform: none !important;
-      transition: none !important;
-    }
-  }
-
   /* ============ SIDE NAV RAIL ============ */
 
   .side-rail {
@@ -2817,40 +2807,48 @@
       if (!scenes.length) return;
 
       function update() {
-        // On screens ≤960px, CSS already forces full opacity — skip JS entirely
-        // so the !important overrides aren't fought by inline styles
-        if (window.innerWidth <= 960) {
-          scenes.forEach(el => {
-            el.style.opacity = '';
-            el.style.filter = '';
-            el.style.transform = '';
-          });
-          return;
-        }
-
         const vh = window.innerHeight;
+        const isMobile = window.innerWidth <= 768;
+        const isTablet = window.innerWidth <= 960;
         const center = vh / 2;
-        // The "active band" is the middle 55% of the viewport.
-        const bandHalf = vh * 0.275;
+
+        // Active band — how much of the viewport counts as "in focus"
+        // Desktop: 55% · Tablet: 75% · Mobile: 90%
+        const bandHalf = isMobile ? vh * 0.45
+                       : isTablet ? vh * 0.375
+                       : vh * 0.275;
+
+        // How far before fully dimmed
+        const fadeAt = isMobile ? vh * 1.1
+                     : isTablet ? vh * 0.9
+                     : vh * 0.7;
+
+        // Max dimming — desktop 82% · tablet 40% · mobile 25%
+        const maxDim  = isMobile ? 0.25
+                      : isTablet ? 0.40
+                      : 0.82;
+
+        // Max blur — desktop 2px · tablet 1px · mobile 0px
+        const maxBlur = isMobile ? 0
+                      : isTablet ? 1
+                      : 2;
 
         scenes.forEach(el => {
           const r = el.getBoundingClientRect();
           const elCenter = r.top + r.height / 2;
           const dist = Math.abs(elCenter - center);
-          // Distance at which it's fully dimmed.
-          const fadeAt = vh * 0.7;
 
           let opacity, blurPx, scale;
           if (dist < bandHalf) {
             opacity = 1; blurPx = 0; scale = 1;
           } else {
             const t = Math.min(1, (dist - bandHalf) / (fadeAt - bandHalf));
-            opacity = 1 - t * 0.82;       // → 0.18
-            blurPx  = t * 2;
+            opacity = 1 - t * maxDim;
+            blurPx  = t * maxBlur;
             scale   = 1 - t * 0.015;
           }
           el.style.opacity = opacity.toFixed(3);
-          el.style.filter = `blur(${blurPx.toFixed(2)}px)`;
+          el.style.filter  = blurPx > 0.01 ? `blur(${blurPx.toFixed(2)}px)` : '';
           el.style.transform = `scale(${scale.toFixed(4)})`;
         });
       }
