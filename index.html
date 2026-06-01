@@ -1429,6 +1429,16 @@
     transform: scale(1);
   }
 
+  /* On mobile and tablet — disable the dimming effect entirely so sections stay fully readable */
+  @media (max-width: 960px) {
+    .scene {
+      opacity: 1 !important;
+      filter: none !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
   /* ============ SIDE NAV RAIL ============ */
 
   .side-rail {
@@ -2807,6 +2817,17 @@
       if (!scenes.length) return;
 
       function update() {
+        // On screens ≤960px, CSS already forces full opacity — skip JS entirely
+        // so the !important overrides aren't fought by inline styles
+        if (window.innerWidth <= 960) {
+          scenes.forEach(el => {
+            el.style.opacity = '';
+            el.style.filter = '';
+            el.style.transform = '';
+          });
+          return;
+        }
+
         const vh = window.innerHeight;
         const center = vh / 2;
         // The "active band" is the middle 55% of the viewport.
