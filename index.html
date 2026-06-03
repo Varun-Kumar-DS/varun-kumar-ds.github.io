@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Varun Kumar — AI Engineer in Training</title>
+<title>Varun Kumar | AI Engineer in Training</title>
 
 <!-- Favicon (B.E.R.U orb, embedded as data URI — no external file required) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><radialGradient id='g' cx='35%25' cy='30%25' r='70%25'><stop offset='0%25' stop-color='%23fff2e6'/><stop offset='55%25' stop-color='%23d97757'/><stop offset='100%25' stop-color='%23c2410c'/></radialGradient></defs><rect width='64' height='64' rx='12' fill='%23faf8f4'/><circle cx='32' cy='32' r='18' fill='url(%23g)'/><ellipse cx='26' cy='25' rx='5' ry='3' fill='%23ffffff' opacity='0.55'/><circle cx='32' cy='32' r='22' fill='none' stroke='%23c2410c' stroke-opacity='0.35' stroke-width='1'/></svg>" />
@@ -309,20 +309,33 @@
   .id-subtitle .cursor {
     display: inline-block;
     width: 9px; height: 1.05em;
-    background: var(--white);
+    background: var(--accent);
     vertical-align: text-bottom;
     margin-left: 5px;
     animation: blink 1s steps(2) infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
+  /* Reveal the steady-state cursor only after typing finishes */
+  .id-subtitle.typed-done .cursor { opacity: 1; }
   @keyframes blink { 50% { opacity: 0; } }
 
   .id-summary {
-    font-size: 1.12rem;
-    line-height: 1.7;
     color: var(--white-soft);
     margin-bottom: 28px;
     max-width: 64ch;
+    opacity: 0;
+    transition: opacity 0.6s ease 0.3s;
   }
+  .id-summary.reveal-now {
+    opacity: 1;
+  }
+  .id-summary p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+  .id-summary p:last-child { margin-bottom: 0; }
 
   .id-summary strong {
     color: var(--white);
@@ -330,8 +343,53 @@
   }
   .id-summary em {
     color: var(--accent);
-    font-style: normal;
+    font-style: italic;
     font-weight: 500;
+  }
+  .id-summary-tags {
+    font-family: var(--f-mono);
+    font-size: 0.85rem !important;
+    letter-spacing: 0.05em;
+    color: var(--white-dim) !important;
+    margin-top: 18px !important;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .id-summary-cta {
+    font-size: 1rem !important;
+    font-family: var(--f-display);
+    margin-top: 14px !important;
+  }
+  .id-summary-cta em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* ============ TYPING ANIMATION ============ */
+  /* Used by typed-name and typed-subtitle. JS feeds text in character by character. */
+  .typed-name, .typed-subtitle {
+    display: inline-block;
+    white-space: pre-wrap;
+  }
+  .typed-name .accent-char {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 400;
+  }
+  /* Blinking caret while text is being typed */
+  .typing-caret {
+    display: inline-block;
+    width: 0.55ch;
+    height: 0.95em;
+    background: var(--accent);
+    vertical-align: text-bottom;
+    margin-left: 2px;
+    animation: caret-blink 0.7s steps(2) infinite;
+    transform: translateY(-2px);
+  }
+  @keyframes caret-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
   }
 
   .stat-bar {
@@ -811,6 +869,58 @@
     background: rgba(217, 119, 87, 0.08);
     border-color: var(--line-accent);
     color: var(--accent);
+  }
+
+  .proj .metric.accent {
+    background: rgba(217, 119, 87, 0.08);
+    border-color: var(--line-accent);
+    color: var(--accent);
+  }
+
+  /* Dissertation card — "In Progress" treatment */
+  .dissertation-card {
+    border-color: var(--line-accent) !important;
+    background:
+      linear-gradient(135deg, rgba(217, 119, 87, 0.06), transparent 60%),
+      var(--bg-panel);
+  }
+
+  .proj-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: dot-pulse 1.6s ease-in-out infinite;
+  }
+
+  .proj-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 14px;
+    margin-top: 4px;
+  }
+  .proj-tag {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--line-accent);
+    color: var(--accent-soft);
+    background: rgba(217, 119, 87, 0.06);
   }
 
   /* ============ ROADMAP ============ */
@@ -1419,9 +1529,9 @@
     will-change: opacity, filter, transform;
   }
   .scene.dim {
-    opacity: 0.18;
-    filter: blur(2px);
-    transform: scale(0.985);
+    opacity: 0.40;
+    filter: blur(1px);
+    transform: scale(0.99);
   }
   .scene.focus {
     opacity: 1;
@@ -2194,12 +2304,21 @@
           <span class="tag accent">ML · NLP · DEEP LEARNING</span>
         </div>
 
-        <h1 class="id-name">VARUN <span class="accent">KUMAR</span></h1>
-        <div class="id-subtitle">LEARNING TO BUILD INTELLIGENT SYSTEMS<span class="cursor"></span></div>
+        <h1 class="id-name"><span class="typed-name" data-typed-text="VARUN KUMAR"></span></h1>
+        <div class="id-subtitle"><span class="typed-subtitle" data-typed-text="LEARNING TO BUILD INTELLIGENT SYSTEMS"></span><span class="cursor"></span></div>
 
-        <p class="id-summary">
-          <strong>MSc Data Science &amp; Artificial Intelligence</strong> candidate at the University of Liverpool with hands-on experience in machine learning, NLP, predictive modeling, and data visualization. Presented research at a national conference. Skilled in <strong>Python, SQL, TensorFlow, and Power BI</strong>, with a track record of designing end-to-end AI solutions that deliver measurable business impact. <em>Actively seeking challenging opportunities in Data Science and Machine Learning.</em>
-        </p>
+        <div class="id-summary">
+          <p>Currently pursuing an <strong>MSc in Data Science &amp; AI</strong> at the University of Liverpool, genuinely obsessed with building things that actually work, not just look good in a notebook.</p>
+
+          <p>Coming from an engineering background with a <strong>B.Tech in ECE and a Data Science specialisation</strong> from SRM Chennai, so my approach to problems is always systems-first. Built five ML projects across telecom, agriculture, IoT, social media and e-commerce. Even got a <em>national conference paper</em> out of it.</p>
+
+          <p>Currently working on my dissertation titled <strong>"Prompt Engineering for AI Language Models"</strong>, exploring how prompts shape model behaviour, output quality and evaluation across real-world tasks.</p>
+
+          <p>Still early in the journey, not gonna lie. But learning fast, investing in the right stack: <strong>LLMs, RAG, MLOps, transformers</strong>, and showing up every day to get better at the craft.</p>
+
+          <p class="id-summary-tags">Team player &nbsp;·&nbsp; Fast learner &nbsp;·&nbsp; End-to-end builder</p>
+          <p class="id-summary-cta"><em>Open to opportunities. Let's talk.</em></p>
+        </div>
 
         <div class="stat-bar">
           <div class="stat">
@@ -2277,7 +2396,7 @@
         <div class="icon">◈</div>
         <div class="body">
           <div class="label">// Primary Objective</div>
-          <div class="txt">Build a career as an <b>AI Engineer</b> — designing, training, and deploying intelligent systems that solve real problems.</div>
+          <div class="txt">Build a career as an <b>AI Engineer</b>: designing, training and deploying intelligent systems that solve real problems.</div>
         </div>
         <div class="pulse"><span class="d"></span> LOCKED ON</div>
       </div>
@@ -2296,7 +2415,7 @@
       <div class="grid-2">
         <div class="panel edu">
           <h3>University of Liverpool</h3>
-          <div class="deg">MSc — Data Science &amp; Artificial Intelligence</div>
+          <div class="deg">MSc in Data Science &amp; Artificial Intelligence</div>
           <span class="status">In Progress</span>
           <div class="meta" style="margin-top: 12px;">
             <span>United Kingdom</span>
@@ -2306,7 +2425,7 @@
 
         <div class="panel edu">
           <h3>SRM Institute of Science &amp; Technology</h3>
-          <div class="deg">B.Tech — Electronics &amp; Communication Engineering<br>(Specialization in Data Science)</div>
+          <div class="deg">B.Tech in Electronics &amp; Communication Engineering<br>(Specialization in Data Science)</div>
           <div class="meta">
             <span>Chennai, India</span>
             <span><b>2018 &ndash; 2022</b></span>
@@ -2385,7 +2504,7 @@
 
       <div class="panel exp-card">
         <div class="exp-head">
-          <div class="exp-role">Python Intern <span class="exp-org">— Kaashiv InfoTech, Chennai</span></div>
+          <div class="exp-role">Python Intern <span class="exp-org">at Kaashiv InfoTech, Chennai</span></div>
           <div class="exp-date">2022</div>
         </div>
         <ul class="exp-list">
@@ -2401,7 +2520,7 @@
       <div class="sec-head">
         <span class="idx">04</span>
         <span>/ PROJECT ARCHIVE</span>
-        <span class="tag-bit">05 ENTRIES</span>
+        <span class="tag-bit">06 ENTRIES</span>
         <span class="bar"></span>
       </div>
       <h2 class="sec-title">Projects <span class="ghost">// what I've built</span></h2>
@@ -2442,11 +2561,21 @@
           <span class="metric">~85% accuracy</span>
         </div>
 
-        <div class="panel proj" style="display:flex; align-items:center; justify-content:center; text-align:center; color: var(--white-faint); font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.9;">
-          <div>
-            // NEXT_PROJECT<br>
-            <span style="color: var(--accent);">LOADING...</span>
+        <div class="panel proj dissertation-card">
+          <div class="proj-idx">06</div>
+          <div class="proj-status-badge">
+            <span class="status-dot"></span>
+            In Progress
           </div>
+          <h4>Prompt Engineering for AI Language Models</h4>
+          <p>MSc Dissertation. Investigating how prompt design shapes model behaviour, output quality and evaluation across real-world tasks. Exploring systematic prompting strategies, chain-of-thought reasoning, and evaluation frameworks for LLMs.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">LLMs</span>
+            <span class="proj-tag">Prompt Engineering</span>
+            <span class="proj-tag">NLP</span>
+            <span class="proj-tag">Evaluation</span>
+          </div>
+          <span class="metric accent">MSc Dissertation · 2025–2026</span>
         </div>
       </div>
     </section>
@@ -2517,7 +2646,7 @@
         <div class="panel list-block">
           <div class="lb-head">// Certifications</div>
           <ul>
-            <li>Data Science &amp; AI Certification (6 months) — Boston Institute of Analytics</li>
+            <li>Data Science &amp; AI Certification (6 months) at Boston Institute of Analytics</li>
             <li>Python for Data Science &amp; Machine Learning</li>
             <li>Deep Learning in Neural Networks &amp; AI with ChatGPT</li>
             <li>Additional workshops in Power BI, RPA, and Big Data <em style="color: var(--white-faint); font-style: normal;">(available upon request)</em></li>
@@ -2528,8 +2657,8 @@
           <div class="lb-head">// Achievements</div>
           <ul>
             <li>Presented <b style="color: var(--white);">IoT-based Air Quality Monitoring System</b> at National Conference<span class="year">2024</span></li>
-            <li>Symposium Coordinator — Abhigyan '22, SRM University<span class="year">2022</span></li>
-            <li>Joint Treasurer — Rotaract Club of SRM Vadapalani<span class="year">2021 – 2023</span></li>
+            <li>Symposium Coordinator, Abhigyan '22, SRM University<span class="year">2022</span></li>
+            <li>Joint Treasurer, Rotaract Club of SRM Vadapalani<span class="year">2021 – 2023</span></li>
           </ul>
         </div>
 
@@ -2566,7 +2695,7 @@
           <div class="resume-label"><span class="pulse-dot"></span> CV.v2026 // READY</div>
           <h2 class="resume-headline">Want a copy of my CV?<br><span class="hl-accent">Grab it here.</span></h2>
           <p class="resume-sub">
-            Single-page PDF. Everything from this portfolio in a recruiter-friendly format — projects, skills, education, the lot. Print it, share it, email it on. Yours to keep.
+            Single-page PDF. Everything from this portfolio in a recruiter-friendly format: projects, skills, education, the lot. Print it, share it, email it on. Yours to keep.
           </p>
 
           <div class="resume-cta-row">
@@ -2628,7 +2757,7 @@
         <div class="cn-label"><span class="live"></span> Response window &lt; 24H</div>
         <h2 class="cn-title">Want to connect? <span class="hl">Click here.</span></h2>
         <p class="cn-sub">
-          Open to internships, research collaborations, entry-level roles, or a chat about AI and machine learning. Drop a line on email or LinkedIn — whichever you prefer.
+          Open to internships, research collaborations, entry-level roles, or a chat about AI and machine learning. Drop a line on email or LinkedIn, whichever you prefer.
         </p>
 
         <div class="cn-cta-row">
@@ -2745,6 +2874,81 @@
       p.addEventListener('mouseleave', () => { p.style.background = ''; });
     });
 
+    // ============ TYPING ANIMATION (hero name + subtitle) ============
+    // Types the name and tagline character by character on page load.
+    // After both finish, the about paragraph fades in.
+    (function typingAnimation() {
+      const nameEl     = document.querySelector('.typed-name');
+      const subtitleEl = document.querySelector('.typed-subtitle');
+      const summaryEl  = document.querySelector('.id-summary');
+      if (!nameEl || !subtitleEl) return;
+
+      const nameText     = nameEl.dataset.typedText || '';
+      const subtitleText = subtitleEl.dataset.typedText || '';
+
+      // Reduced motion: skip animation, show everything immediately.
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reducedMotion) {
+        nameEl.innerHTML = formatNameWithAccent(nameText);
+        subtitleEl.textContent = subtitleText;
+        const subtitleParent = document.querySelector('.id-subtitle');
+        if (subtitleParent) subtitleParent.classList.add('typed-done');
+        if (summaryEl) summaryEl.classList.add('reveal-now');
+        return;
+      }
+
+      // Build "VARUN [KUMAR]" so the second word gets the italic accent treatment.
+      function formatNameWithAccent(text) {
+        const parts = text.split(' ');
+        if (parts.length >= 2) {
+          return parts[0] + ' <span class="accent-char">' + parts.slice(1).join(' ') + '</span>';
+        }
+        return text;
+      }
+
+      function typeInto(el, fullText, opts) {
+        return new Promise(resolve => {
+          let i = 0;
+          // Add a blinking caret while typing
+          const caret = document.createElement('span');
+          caret.className = 'typing-caret';
+          el.parentNode.insertBefore(caret, el.nextSibling);
+
+          function tick() {
+            i += 1;
+            const slice = fullText.slice(0, i);
+            if (opts && opts.useAccent) {
+              el.innerHTML = formatNameWithAccent(slice);
+            } else {
+              el.textContent = slice;
+            }
+            if (i < fullText.length) {
+              setTimeout(tick, opts.speed);
+            } else {
+              // Remove caret when done
+              caret.remove();
+              resolve();
+            }
+          }
+          setTimeout(tick, opts.startDelay || 0);
+        });
+      }
+
+      // Clear the data-text placeholders so they don't show before typing starts.
+      nameEl.textContent = '';
+      subtitleEl.textContent = '';
+
+      // Run the sequence: name → subtitle → fade in summary.
+      typeInto(nameEl, nameText, { speed: 90, startDelay: 350, useAccent: true })
+        .then(() => typeInto(subtitleEl, subtitleText, { speed: 38, startDelay: 200 }))
+        .then(() => {
+          // Once subtitle is done, show the steady-state cursor next to it
+          const subtitleParent = document.querySelector('.id-subtitle');
+          if (subtitleParent) subtitleParent.classList.add('typed-done');
+          if (summaryEl) summaryEl.classList.add('reveal-now');
+        });
+    })();
+
     // ============ SIDE-RAIL NAV ============
     (function sideRail() {
       const buttons = document.querySelectorAll('.rail-btn');
@@ -2814,24 +3018,24 @@
 
         // Active band — how much of the viewport counts as "in focus"
         // Desktop: 55% · Tablet: 75% · Mobile: 90%
-        const bandHalf = isMobile ? vh * 0.45
-                       : isTablet ? vh * 0.375
-                       : vh * 0.275;
+        const bandHalf = isMobile ? vh * 0.48
+                       : isTablet ? vh * 0.42
+                       : vh * 0.32;
 
         // How far before fully dimmed
-        const fadeAt = isMobile ? vh * 1.1
-                     : isTablet ? vh * 0.9
-                     : vh * 0.7;
+        const fadeAt = isMobile ? vh * 1.2
+                     : isTablet ? vh * 1.0
+                     : vh * 0.82;
 
-        // Max dimming — desktop 82% · tablet 40% · mobile 25%
-        const maxDim  = isMobile ? 0.25
-                      : isTablet ? 0.40
-                      : 0.82;
+        // Max dimming — desktop 60% · tablet 30% · mobile 18%
+        const maxDim  = isMobile ? 0.18
+                      : isTablet ? 0.30
+                      : 0.60;
 
-        // Max blur — desktop 2px · tablet 1px · mobile 0px
+        // Max blur — desktop 1.5px · tablet 0.5px · mobile 0px
         const maxBlur = isMobile ? 0
-                      : isTablet ? 1
-                      : 2;
+                      : isTablet ? 0.5
+                      : 1.5;
 
         scenes.forEach(el => {
           const r = el.getBoundingClientRect();
