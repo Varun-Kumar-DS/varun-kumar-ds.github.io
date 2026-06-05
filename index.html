@@ -234,7 +234,7 @@ nav {
   overflow: hidden;
 }
 .hero-headline em { font-style: italic; color: var(--red); font-weight: 300; }
-.word-wrap { overflow: hidden; display: inline-block; margin-right: 0.22em; }
+.word-wrap { overflow: hidden; display: inline-block; margin-right: 0.22em; vertical-align: bottom; }
 .word-inner { display: inline-block; }
 
 .hero-sub {
@@ -422,11 +422,11 @@ nav {
   font-family: var(--f-serif);
   font-size: clamp(2.2rem, 4vw, 3.8rem);
   font-weight: 300;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -0.015em;
   color: var(--text);
   margin-bottom: 48px;
-  overflow: hidden;
+  overflow: visible;
 }
 .sec-title em { font-style: italic; color: var(--red); }
 
@@ -2534,9 +2534,34 @@ footer {
             io.unobserve(sec);
             // Animate headings word by word
             sec.querySelectorAll('.sec-title').forEach(h => {
-              const text = h.innerHTML;
-              const wrapped = text.replace(/(\S+)/g, '<span class="rev-word" style="overflow:hidden;display:inline-block;"><span class="rev-inner" style="display:inline-block;transform:translateY(110%);opacity:0">$1</span></span>');
-              h.innerHTML = wrapped;
+              // Split only TEXT nodes, not HTML tags/entities, to preserve <br> and <em>
+              const wrapTextNodes = (el) => {
+                Array.from(el.childNodes).forEach(node => {
+                  if(node.nodeType === 3) { // text node
+                    const words = node.textContent.split(/(\s+)/);
+                    const frag = document.createDocumentFragment();
+                    words.forEach(w => {
+                      if(/\S/.test(w)){
+                        const outer = document.createElement('span');
+                        outer.className = 'rev-word';
+                        outer.style.cssText = 'overflow:hidden;display:inline-block;vertical-align:bottom;';
+                        const inner = document.createElement('span');
+                        inner.className = 'rev-inner';
+                        inner.style.cssText = 'display:inline-block;transform:translateY(110%);opacity:0;';
+                        inner.textContent = w;
+                        outer.appendChild(inner);
+                        frag.appendChild(outer);
+                      } else if(w) {
+                        frag.appendChild(document.createTextNode(w));
+                      }
+                    });
+                    node.replaceWith(frag);
+                  } else if(node.nodeType === 1 && node.tagName !== 'BR') {
+                    wrapTextNodes(node); // recurse into <em> etc
+                  }
+                });
+              };
+              wrapTextNodes(h);
               gsap.to(h.querySelectorAll('.rev-inner'), {
                 y:0, opacity:1, duration:0.75, ease:'power4.out', stagger:0.06, delay:0.1
               });
