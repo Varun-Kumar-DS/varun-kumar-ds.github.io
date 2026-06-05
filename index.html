@@ -1553,6 +1553,89 @@ footer {
   text-shadow: 0 0 12px rgba(225,29,72,0.4);
 }
 
+
+/* ====================================================
+   HERO NAME — large prominent display
+   ==================================================== */
+.hero-name {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin-bottom: 20px;
+  overflow: visible;
+  line-height: 1;
+}
+.hero-name-first {
+  font-family: var(--f-serif);
+  font-size: clamp(3.8rem, 8vw, 8rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  line-height: 0.9;
+  display: inline-block;
+  /* slide in from left on load */
+  opacity: 0;
+  transform: translateX(-40px);
+}
+.hero-name-last {
+  font-family: var(--f-serif);
+  font-size: clamp(3.8rem, 8vw, 8rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  display: inline-block;
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.hero-name-last em {
+  font-style: italic;
+  color: var(--red);
+  /* Red glow on the name */
+  text-shadow:
+    0 0 40px rgba(225,29,72,0.4),
+    0 0 80px rgba(225,29,72,0.15);
+}
+.hero-name.revealed .hero-name-first,
+.hero-name.revealed .hero-name-last {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+              transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.hero-name.revealed .hero-name-last {
+  transition-delay: 0.1s;
+}
+
+/* Shrink the existing headline a bit since name is now the hero */
+.hero-headline {
+  font-size: clamp(1.8rem, 3.5vw, 3.4rem) !important;
+  margin-bottom: 20px;
+  letter-spacing: -0.025em !important;
+}
+
+/* Make eyebrow sit tighter above the name */
+.hero-eyebrow {
+  margin-bottom: 14px !important;
+}
+
+/* Mobile: stack name tighter */
+@media (max-width: 768px) {
+  .hero-name {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .hero-name-first,
+  .hero-name-last {
+    font-size: clamp(3rem, 11vw, 5rem) !important;
+  }
+}
+@media (max-width: 390px) {
+  .hero-name-first,
+  .hero-name-last {
+    font-size: clamp(2.6rem, 13vw, 4rem) !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1599,6 +1682,10 @@ footer {
 <section class="hero" id="hero" style="opacity:0">
   <div class="hero-left">
     <span class="hero-eyebrow"><span>MSc Data Science & AI · University of Liverpool</span></span>
+    <div class="hero-name" id="hero-name">
+      <span class="hero-name-first">VARUN</span>
+      <span class="hero-name-last"><em>KUMAR</em></span>
+    </div>
     <h1 class="hero-headline">
       <span class="word-wrap"><span class="word-inner">Building</span></span>
       <span class="word-wrap"><span class="word-inner"><em>intelligent</em></span></span>
@@ -2506,6 +2593,12 @@ footer {
 
     // Hero eyebrow
     gsap.from('.hero-eyebrow span', { y:'110%', opacity:0, duration:0.8, ease:'power4.out', delay:0.25 });
+
+    // Hero name - reveal with stagger
+    const heroName = document.getElementById('hero-name');
+    if(heroName){
+      setTimeout(() => heroName.classList.add('revealed'), 150);
+    }
 
     // Hero headline words
     const words = document.querySelectorAll('.word-inner');
