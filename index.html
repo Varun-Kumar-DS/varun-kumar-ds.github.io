@@ -558,25 +558,39 @@ nav {
   width: 100vw;
   left: 50%;
   transform: translateX(-50%);
-  /* overflow-x hidden on outer to mask scroll edges cleanly */
-  /* overflow-y visible so cards can scale up without clipping */
-  overflow-x: hidden;
-  overflow-y: visible;
+  /* NO overflow — it kills child scrollable padding */
+  /* Use mask for edge fade instead */
   padding: 20px 0 60px;
+  /* Fade edges so scroll feels clean without clipping */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
 }
 .proj-track {
   display: flex;
   gap: 24px;
-  /* padding-left/right creates the actual scrollable space for first/last cards */
-  padding: 60px 100px;
+  /* calc(50vw - half_card_width) centres first/last card in viewport */
+  /* At max card 420px: 50vw - 210px. Use 50vw - 220px for slight left bias */
+  padding: 60px calc(50vw - 220px);
   width: 100%;
   overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: auto;
   scroll-snap-type: x proximity;
-  /* scroll-padding must match padding-left exactly so first card snaps flush */
-  scroll-padding-inline: 100px;
+  /* Must match padding exactly */
+  scroll-padding-inline: calc(50vw - 220px);
   cursor: grab;
   user-select: none;
   scrollbar-width: none;
@@ -596,6 +610,7 @@ nav {
   transform-origin: center bottom;
   transform: rotate(var(--card-tilt, 0deg)) scale(0.94);
   opacity: 0.7;
+  align-self: flex-start;
   transition: transform 0.55s cubic-bezier(0.16,1,0.3,1),
               opacity 0.55s cubic-bezier(0.16,1,0.3,1),
               border-color 0.3s;
@@ -969,7 +984,7 @@ footer a:hover { color: var(--text2); }
   .section { padding: 72px 32px; }
   .about-grid { grid-template-columns: 0.9fr 1.1fr; gap: 48px; }
   .photo-frame { width: clamp(260px, 34vw, 360px); }
-  .proj-track { padding: 40px 60px; scroll-padding-inline: 60px; }
+  .proj-track { padding: 40px calc(50vw - 200px); scroll-padding-inline: calc(50vw - 200px); }
   .toolkit-grid { grid-template-columns: repeat(2,1fr); }
   .roadmap-grid { grid-template-columns: repeat(2,1fr); }
   .recog-grid { grid-template-columns: repeat(2,1fr); }
@@ -1087,10 +1102,9 @@ footer a:hover { color: var(--text2); }
   /* PROJECTS */
   .proj-drag-hint { font-size: 9px; }
   .proj-track {
-    padding: 40px 12vw;
+    padding: 40px calc(50vw - 38vw);
     gap: 14px;
-    /* 12vw padding centers a 76vw card - first/last now fully reachable */
-    scroll-padding-inline: 12vw;
+    scroll-padding-inline: calc(50vw - 38vw);
   }
   .proj-card {
     min-width: 76vw !important;
@@ -1636,6 +1650,199 @@ footer {
   }
 }
 
+
+/* ====================================================
+   PROJECT MODAL
+   ==================================================== */
+#proj-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+#proj-modal.open {
+  pointer-events: auto;
+  opacity: 1;
+}
+#proj-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+#proj-modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  max-height: 88vh;
+  background: linear-gradient(160deg, #1a0a10, #0f080e);
+  border: 1px solid rgba(225,29,72,0.3);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(225,29,72,0.3) transparent;
+  transform: translateY(100%);
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:
+    0 -20px 60px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(225,29,72,0.1),
+    0 -1px 0 rgba(225,29,72,0.4);
+}
+#proj-modal.open #proj-modal-panel {
+  transform: translateY(0);
+}
+#proj-modal-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  margin: 16px 20px 0 0;
+  width: 32px; height: 32px;
+  background: rgba(225,29,72,0.1);
+  border: 1px solid rgba(225,29,72,0.3);
+  color: var(--text2);
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: all 0.25s;
+  z-index: 10;
+}
+#proj-modal-close:hover {
+  background: var(--red);
+  color: var(--bg);
+  border-color: var(--red);
+}
+#proj-modal-inner {
+  padding: 24px 40px 48px;
+  clear: both;
+}
+#proj-modal-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+#proj-modal-num {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+#proj-modal-metric {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--red);
+  text-shadow: 0 0 12px rgba(225,29,72,0.4);
+}
+#proj-modal-title {
+  font-family: var(--f-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+#proj-modal-tagline {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--red-soft);
+  margin-bottom: 32px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(225,29,72,0.15);
+}
+.proj-modal-section {
+  margin-bottom: 28px;
+}
+.proj-modal-section-label {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.proj-modal-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(225,29,72,0.3), transparent);
+}
+#proj-modal-what {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #ccc0bc;
+}
+#proj-modal-did {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#proj-modal-did li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #ccc0bc;
+}
+#proj-modal-did li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 11px;
+  width: 10px; height: 1px;
+  background: var(--red);
+}
+#proj-modal-did li strong { color: var(--text); font-weight: 400; }
+#proj-modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#proj-modal-tags .proj-tag {
+  font-size: 11px;
+  padding: 5px 12px;
+}
+
+/* View hint on card */
+.proj-view-hint {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-top: 20px;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.proj-card:hover .proj-view-hint { opacity: 1; transform: translateX(0); }
+.proj-card { cursor: pointer; }
+
+/* Mobile modal */
+@media (max-width: 768px) {
+  #proj-modal-inner { padding: 16px 20px 40px; }
+  #proj-modal-title { font-size: 1.7rem; }
+  #proj-modal-panel { max-height: 90vh; border-radius: 12px 12px 0 0; }
+}
+
 </style>
 </head>
 <body>
@@ -1812,7 +2019,7 @@ footer {
   <div class="proj-scroll-outer">
     <div class="proj-track" id="proj-track">
 
-    <div class="proj-card">
+    <div class="proj-card" data-proj="0" role="button" tabindex="0" aria-label="View project details">
       <div class="proj-num">01</div>
       <div class="proj-metric">86% accuracy</div>
       <h3 class="proj-title">Telecom Customer Churn Prediction</h3>
@@ -1822,9 +2029,10 @@ footer {
         <span class="proj-tag">XGBoost</span>
         <span class="proj-tag neutral">Python</span>
       </div>
+      <div class="proj-view-hint">View case →</div>
     </div>
 
-    <div class="proj-card">
+    <div class="proj-card" data-proj="1" role="button" tabindex="0" aria-label="View project details">
       <div class="proj-num">02</div>
       <div class="proj-metric">~90% accuracy</div>
       <h3 class="proj-title">Plant Disease Detection</h3>
@@ -1834,9 +2042,10 @@ footer {
         <span class="proj-tag">TensorFlow</span>
         <span class="proj-tag neutral">Computer Vision</span>
       </div>
+      <div class="proj-view-hint">View case →</div>
     </div>
 
-    <div class="proj-card">
+    <div class="proj-card" data-proj="2" role="button" tabindex="0" aria-label="View project details">
       <div class="proj-num">03</div>
       <div class="proj-metric">82% F1-score</div>
       <h3 class="proj-title">Twitter Sentiment Analysis</h3>
@@ -1846,9 +2055,10 @@ footer {
         <span class="proj-tag neutral">Scikit-learn</span>
         <span class="proj-tag neutral">Python</span>
       </div>
+      <div class="proj-view-hint">View case →</div>
     </div>
 
-    <div class="proj-card">
+    <div class="proj-card" data-proj="3" role="button" tabindex="0" aria-label="View project details">
       <div class="proj-num">04</div>
       <div class="proj-metric">~90% accuracy</div>
       <h3 class="proj-title">IoT-Based Air Quality Monitoring</h3>
@@ -1858,9 +2068,10 @@ footer {
         <span class="proj-tag">ML</span>
         <span class="proj-tag neutral">Conference Paper</span>
       </div>
+      <div class="proj-view-hint">View case →</div>
     </div>
 
-    <div class="proj-card">
+    <div class="proj-card" data-proj="4" role="button" tabindex="0" aria-label="View project details">
       <div class="proj-num">05</div>
       <div class="proj-metric">~85% accuracy</div>
       <h3 class="proj-title">E-commerce Customer Segmentation</h3>
@@ -1870,9 +2081,10 @@ footer {
         <span class="proj-tag">Hierarchical</span>
         <span class="proj-tag neutral">Scikit-learn</span>
       </div>
+      <div class="proj-view-hint">View case →</div>
     </div>
 
-    <div class="proj-card">
+    <div class="proj-card" data-proj="5" role="button" tabindex="0" aria-label="View project details">
       <div class="proj-num">06</div>
       <div class="proj-status"><span class="dot"></span> In Progress</div>
       <h3 class="proj-title">Prompt Engineering for AI Language Models</h3>
@@ -1883,6 +2095,7 @@ footer {
         <span class="proj-tag">NLP</span>
         <span class="proj-tag neutral">MSc Dissertation 2025-26</span>
       </div>
+      <div class="proj-view-hint">View case →</div>
     </div>
 
     </div><!-- end proj-track -->
@@ -2067,6 +2280,35 @@ footer {
   <span>AI Engineer in training</span>
   <span><a href="https://www.linkedin.com/in/varun-kumar-r-64a311325" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://mail.google.com/mail/?view=cm&fs=1&to=varunkumarrameshkumar085@gmail.com" target="_blank" rel="noopener">Email</a></span>
 </footer>
+
+
+<!-- PROJECT MODAL -->
+<div id="proj-modal" role="dialog" aria-modal="true" aria-label="Project details">
+  <div id="proj-modal-backdrop"></div>
+  <div id="proj-modal-panel">
+    <button id="proj-modal-close" aria-label="Close">&times;</button>
+    <div id="proj-modal-inner">
+      <div id="proj-modal-meta">
+        <span id="proj-modal-num"></span>
+        <span id="proj-modal-metric"></span>
+      </div>
+      <h2 id="proj-modal-title"></h2>
+      <p id="proj-modal-tagline"></p>
+      <div class="proj-modal-section">
+        <div class="proj-modal-section-label">WHAT IT IS</div>
+        <p id="proj-modal-what"></p>
+      </div>
+      <div class="proj-modal-section">
+        <div class="proj-modal-section-label">WHAT I BUILT</div>
+        <ul id="proj-modal-did"></ul>
+      </div>
+      <div class="proj-modal-section">
+        <div class="proj-modal-section-label">TECH STACK</div>
+        <div id="proj-modal-tags"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- BERU PANEL -->
 <div class="beru-launcher hidden" id="beru-launcher">
@@ -2882,6 +3124,160 @@ footer {
     const t = e.target.closest('.inline-qp');
     if(t) send(t.dataset.q||t.textContent);
   });
+
+
+  // ============ PROJECT MODAL ============
+  (function(){
+    const PROJECTS = [
+      {
+        num: '01 · TELECOM',
+        metric: '86% accuracy',
+        title: 'Telecom Customer Churn Prediction',
+        tagline: 'Keeping customers before they leave.',
+        what: 'A machine learning classification system built to predict which telecom customers are likely to churn — enabling the business to intervene proactively with targeted retention strategies before losing the customer.',
+        did: [
+          'Built end-to-end ML pipeline from raw customer data to deployed predictions',
+          'Trained and compared <strong>Random Forest</strong> and <strong>XGBoost</strong> classifiers',
+          'Achieved <strong>86% classification accuracy</strong> on held-out test data',
+          'Engineered features from usage patterns, billing history, and service interactions',
+          'Produced actionable churn probability scores for each customer segment'
+        ],
+        tags: ['Random Forest','XGBoost','Python','Scikit-learn','Feature Engineering']
+      },
+      {
+        num: '02 · COMPUTER VISION',
+        metric: '~90% accuracy',
+        title: 'Plant Disease Detection',
+        tagline: 'Catching crop disease before it spreads.',
+        what: 'A deep learning image classification system that identifies plant diseases from leaf photographs. Designed to give farmers and agronomists an early-warning tool that reduces crop losses by catching disease at the earliest visible stage.',
+        did: [
+          'Built a <strong>Convolutional Neural Network (CNN)</strong> using TensorFlow/Keras',
+          'Trained on a labelled dataset of healthy and diseased leaf images',
+          'Achieved <strong>~90% accuracy</strong> across multiple disease categories',
+          'Applied data augmentation (rotation, flipping, zoom) to improve generalisation',
+          'Packaged the model for inference on new images'
+        ],
+        tags: ['CNN','TensorFlow','Keras','Computer Vision','Data Augmentation','Python']
+      },
+      {
+        num: '03 · NLP',
+        metric: '82% F1-score',
+        title: 'Twitter Sentiment Analysis',
+        tagline: 'Turning tweets into brand intelligence.',
+        what: 'An NLP pipeline that classifies the sentiment of tweets at scale, built for brand monitoring use cases. The system processes large volumes of social media text and labels each tweet as positive, negative, or neutral — giving brands a real-time read of public opinion.',
+        did: [
+          'Processed and cleaned a dataset of <strong>50,000+ tweets</strong>',
+          'Applied tokenisation, stop-word removal, and TF-IDF vectorisation',
+          'Trained supervised classifiers and achieved <strong>82% F1-score</strong>',
+          'Handled class imbalance using resampling techniques',
+          'Built a reusable pipeline suitable for live social media monitoring'
+        ],
+        tags: ['NLP','Scikit-learn','TF-IDF','Python','Text Classification','NLTK']
+      },
+      {
+        num: '04 · IoT + ML',
+        metric: '~90% accuracy',
+        title: 'IoT-Based Air Quality Monitoring',
+        tagline: 'Real-time pollution intelligence from sensor data.',
+        what: 'A hybrid IoT and machine learning system that ingests live sensor readings and predicts ambient air quality levels in real time. The project combined hardware data collection with ML-based forecasting and was presented at a National Conference in 2024.',
+        did: [
+          'Designed and integrated a <strong>sensor-based IoT data collection</strong> system',
+          'Built ML regression models to predict pollution level from sensor readings',
+          'Achieved <strong>~90% prediction accuracy</strong> on real-world air quality data',
+          'Developed real-time data pipeline from hardware to model inference',
+          '<strong>Presented findings at a National Conference (2024)</strong> — peer-reviewed paper'
+        ],
+        tags: ['IoT','Machine Learning','Python','Regression','Real-time ML','Conference Paper']
+      },
+      {
+        num: '05 · UNSUPERVISED ML',
+        metric: '~85% accuracy',
+        title: 'E-commerce Customer Segmentation',
+        tagline: 'Finding the customers worth keeping.',
+        what: 'An unsupervised learning project that segments e-commerce customers into meaningful groups based on purchasing behaviour, demographics, and engagement patterns. The segments were then used to power targeted marketing and retention strategies.',
+        did: [
+          'Applied <strong>K-Means and Hierarchical clustering</strong> to customer transaction data',
+          'Identified high-value, at-risk, and dormant customer segments',
+          'Boosted targeted marketing effectiveness and retention by <strong>15–20%</strong>',
+          'Used dimensionality reduction (PCA) to visualise cluster separation',
+          'Delivered segment profiles and actionable recommendations for each cluster'
+        ],
+        tags: ['K-Means','Hierarchical Clustering','PCA','Scikit-learn','Python','Pandas']
+      },
+      {
+        num: '06 · MSc DISSERTATION',
+        metric: 'In Progress · 2025-26',
+        title: 'Prompt Engineering for AI Language Models',
+        tagline: 'How you ask shapes what you get.',
+        what: 'My MSc dissertation at the University of Liverpool. Investigating how the design and structure of prompts systematically affect the behaviour, output quality, and reliability of large language models — with a focus on building evaluation frameworks that can measure these effects rigorously.',
+        did: [
+          'Designing a systematic study of <strong>prompt structure and model behaviour</strong>',
+          'Exploring chain-of-thought, few-shot, and zero-shot prompting strategies',
+          'Building <strong>evaluation frameworks</strong> to measure prompt effectiveness quantitatively',
+          'Investigating prompt sensitivity across different LLM architectures',
+          'Producing research findings relevant to production AI engineering'
+        ],
+        tags: ['LLMs','Prompt Engineering','NLP','Evaluation','Chain-of-Thought','Python','Research']
+      }
+    ];
+
+    const modal      = document.getElementById('proj-modal');
+    const backdrop   = document.getElementById('proj-modal-backdrop');
+    const closeBtn   = document.getElementById('proj-modal-close');
+    const mNum       = document.getElementById('proj-modal-num');
+    const mMetric    = document.getElementById('proj-modal-metric');
+    const mTitle     = document.getElementById('proj-modal-title');
+    const mTagline   = document.getElementById('proj-modal-tagline');
+    const mWhat      = document.getElementById('proj-modal-what');
+    const mDid       = document.getElementById('proj-modal-did');
+    const mTags      = document.getElementById('proj-modal-tags');
+    if(!modal) return;
+
+    function openModal(idx){
+      const p = PROJECTS[idx];
+      if(!p) return;
+      mNum.textContent     = p.num;
+      mMetric.textContent  = p.metric;
+      mTitle.textContent   = p.title;
+      mTagline.textContent = p.tagline;
+      mWhat.textContent    = p.what;
+      mDid.innerHTML       = p.did.map(d => '<li>' + d + '</li>').join('');
+      mTags.innerHTML      = p.tags.map(t =>
+        '<span class="proj-tag">' + t + '</span>'
+      ).join('');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function closeModal(){
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Card clicks
+    document.querySelectorAll('.proj-card[data-proj]').forEach(card => {
+      card.addEventListener('click', e => {
+        // Don't open if user is dragging
+        const idx = parseInt(card.dataset.proj);
+        if(!isNaN(idx)) openModal(idx);
+      });
+      card.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          const idx = parseInt(card.dataset.proj);
+          if(!isNaN(idx)) openModal(idx);
+        }
+      });
+    });
+
+    // Close
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape') closeModal();
+    });
+  })();
 
 })();
 </script>
