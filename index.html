@@ -2015,7 +2015,7 @@ footer {
 <section class="section" id="projects">
   <div class="sec-label">03 · Projects</div>
   <h2 class="sec-title">What I've <em>built.</em></h2>
-  <div class="proj-drag-hint">Drag to explore · 6 projects</div>
+  <div class="proj-drag-hint">Drag to explore · 7 projects</div>
   <div class="proj-scroll-outer">
     <div class="proj-track" id="proj-track">
 
@@ -2086,6 +2086,20 @@ footer {
 
     <div class="proj-card" data-proj="5" role="button" tabindex="0" aria-label="View project details">
       <div class="proj-num">06</div>
+      <div class="proj-metric">Microsoft Phi-1.5</div>
+      <h3 class="proj-title">AI Health Assistant Chatbot</h3>
+      <p class="proj-desc">Conversational AI chatbot built on Microsoft Phi-1.5 with a Gradio UI, designed to answer general health queries with fairness and impartiality.</p>
+      <div class="proj-tags">
+        <span class="proj-tag">Transformers</span>
+        <span class="proj-tag">Gradio</span>
+        <span class="proj-tag neutral">Microsoft Phi-1.5</span>
+        <span class="proj-tag neutral">HuggingFace</span>
+      </div>
+      <div class="proj-view-hint">View case →</div>
+    </div>
+
+    <div class="proj-card" data-proj="6" role="button" tabindex="0" aria-label="View project details">
+      <div class="proj-num">07</div>
       <div class="proj-status"><span class="dot"></span> In Progress</div>
       <h3 class="proj-title">Prompt Engineering for AI Language Models</h3>
       <p class="proj-desc">MSc Dissertation. Investigating how prompt design shapes model behaviour, output quality and evaluation across real-world tasks. Exploring systematic prompting strategies, chain-of-thought reasoning, and evaluation frameworks for LLMs.</p>
@@ -2093,6 +2107,7 @@ footer {
         <span class="proj-tag">LLMs</span>
         <span class="proj-tag">Prompt Engineering</span>
         <span class="proj-tag">NLP</span>
+        <span class="proj-tag">Evaluation</span>
         <span class="proj-tag neutral">MSc Dissertation 2025-26</span>
       </div>
       <div class="proj-view-hint">View case →</div>
@@ -2948,12 +2963,14 @@ footer {
     { k:['skill','tech','stack','python','tensorflow','tool','know'],
       r:()=>`${NAME}'s toolkit: <ul><li><strong>Programming:</strong> Python, SQL</li><li><strong>ML/AI:</strong> TensorFlow, Scikit-learn</li><li><strong>Visualisation:</strong> Power BI, Tableau, Matplotlib</li><li><strong>Libraries:</strong> Pandas, NumPy</li></ul>` },
     { k:['project','built','portfolio','work','what has he done'],
-      r:()=>`Five end-to-end projects:<ul><li>Telecom Churn Prediction - 86% accuracy</li><li>Plant Disease Detection (CNN) - ~90% accuracy</li><li>Twitter Sentiment Analysis - 82% F1</li><li>IoT Air Quality Monitoring - ~90% accuracy (national conference)</li><li>E-commerce Segmentation - ~85% accuracy</li><li>Prompt Engineering for AI LMs (MSc Dissertation, in progress)</li></ul>` },
+      r:()=>`Seven end-to-end projects:<ul><li>Telecom Churn Prediction - 86% accuracy</li><li>Plant Disease Detection (CNN) - ~90% accuracy</li><li>Twitter Sentiment Analysis - 82% F1</li><li>IoT Air Quality Monitoring - ~90% accuracy (national conference)</li><li>E-commerce Segmentation - ~85% accuracy</li><li>AI Health Assistant Chatbot (Phi-1.5 + Gradio)</li><li>Prompt Engineering for AI LMs (MSc Dissertation, in progress)</li></ul>` },
     { k:['churn','telecom'], r:()=>`Telecom Customer Churn Prediction - Random Forest and XGBoost, <strong>86% accuracy</strong>. Designed to flag at-risk customers early for proactive retention.` },
     { k:['plant','disease','cnn','crop'], r:()=>`Plant Disease Detection - CNN in TensorFlow, ~<strong>90% accuracy</strong>. Classifies diseased crop leaves from images to enable early diagnosis.` },
     { k:['twitter','sentiment','nlp','tweet'], r:()=>`Twitter Sentiment Analysis - NLP on 50,000+ tweets, <strong>82% F1-score</strong>. Built for brand monitoring pipelines.` },
     { k:['iot','air quality','pollution','sensor','conference'], r:()=>`IoT-Based Air Quality Monitoring - sensor hardware + ML, ~<strong>90% accuracy</strong>. Presented at a <strong>National Conference in 2024</strong>.` },
     { k:['ecommerce','segmentation','cluster','kmeans'], r:()=>`E-commerce Customer Segmentation - K-Means and Hierarchical clustering, ~<strong>85% accuracy</strong>. Lifted retention by 15–20%.` },
+    { k:['health','chatbot','gradio','phi','microsoft','health assistant'],
+      r:()=>`${NAME} built an <strong>AI Health Assistant Chatbot</strong> using Microsoft Phi-1.5 via HuggingFace Transformers with a Gradio web interface. It answers general health queries with a carefully engineered system prompt that enforces fairness and impartiality - no bias based on sex, religion, caste, or nationality. Deployed end-to-end in Google Colab.` },
     { k:['dissertation','prompt engineering','prompt'], r:()=>`${NAME}'s MSc Dissertation is titled <strong>"Prompt Engineering for AI Language Models"</strong> - investigating how prompt design shapes model behaviour, chain-of-thought reasoning, and evaluation frameworks for LLMs.` },
     { k:['experience','intern','kaashiv','work history'], r:()=>`${NAME}'s industry experience: <strong>Python Intern at Kaashiv InfoTech, Chennai (2022)</strong>. Improved data-entry efficiency by 30% with automation scripts, designed ML prototypes, and collaborated with senior developers.` },
     { k:['contact','reach','email','linkedin','phone','get in touch'],
@@ -3198,14 +3215,30 @@ footer {
         did: [
           'Applied <strong>K-Means and Hierarchical clustering</strong> to customer transaction data',
           'Identified high-value, at-risk, and dormant customer segments',
-          'Boosted targeted marketing effectiveness and retention by <strong>15–20%</strong>',
+          'Boosted targeted marketing effectiveness and retention by <strong>15-20%</strong>',
           'Used dimensionality reduction (PCA) to visualise cluster separation',
           'Delivered segment profiles and actionable recommendations for each cluster'
         ],
         tags: ['K-Means','Hierarchical Clustering','PCA','Scikit-learn','Python','Pandas']
       },
       {
-        num: '06 · MSc DISSERTATION',
+        num: '06 · LLM + GRADIO',
+        metric: 'Microsoft Phi-1.5',
+        title: 'AI Health Assistant Chatbot',
+        tagline: 'Ask a question. Get a fair, grounded answer.',
+        what: 'A conversational AI chatbot built using Microsoft Phi-1.5 (a compact but capable language model from HuggingFace) with a Gradio web interface. Designed specifically for general health queries, with a system prompt that enforces fairness, impartiality, and unbiased responses regardless of the user\'s background.',
+        did: [
+          'Loaded and ran <strong>Microsoft Phi-1.5</strong> via HuggingFace Transformers',
+          'Built a custom <strong>Gradio UI</strong> — clean chat interface deployable in a browser',
+          'Engineered a detailed <strong>system prompt</strong> enforcing fairness, no bias by sex, religion, caste, nationality or race',
+          'Implemented text generation with <strong>top-k and nucleus sampling</strong> (top_k=50, top_p=0.9) for natural responses',
+          'Handled post-processing to clean model output and strip generation artefacts',
+          'Deployed the full pipeline end-to-end in Google Colab'
+        ],
+        tags: ['Transformers','Gradio','Microsoft Phi-1.5','HuggingFace','Python','LLM','Prompt Engineering','Google Colab']
+      },
+      {
+        num: '07 · MSc DISSERTATION',
         metric: 'In Progress · 2025-26',
         title: 'Prompt Engineering for AI Language Models',
         tagline: 'How you ask shapes what you get.',
