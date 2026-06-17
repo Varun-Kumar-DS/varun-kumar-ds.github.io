@@ -2582,6 +2582,46 @@ nav, .section, .marquee-section, footer {
   .cine-tl, .cine-br { opacity: 1; transform: none; }
 }
 
+
+/* ====================================================
+   SMOOTH SCROLL IMPROVEMENTS
+   ==================================================== */
+
+/* Prevent scroll chaining on iOS */
+html {
+  overscroll-behavior-y: none;
+}
+
+/* Smoother section transitions */
+.section.visible {
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+              transform 0.7s cubic-bezier(0.16,1,0.3,1) !important;
+}
+
+/* Touch improvements */
+body {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+/* Project track touch */
+.proj-track {
+  touch-action: pan-x;
+}
+
+/* Reduce section padding on tablet/mobile for easier scrolling */
+@media (max-width: 960px) {
+  .section { padding: 52px 28px !important; }
+  .hero { padding: 90px 20px 52px !important; }
+}
+@media (max-width: 768px) {
+  .section { padding: 44px 20px !important; }
+  .hero { padding: 84px 20px 44px !important; }
+}
+@media (max-width: 390px) {
+  .section { padding: 36px 16px !important; }
+}
+
 </style>
 </head>
 <body>
@@ -2763,7 +2803,7 @@ nav, .section, .marquee-section, footer {
   <h2 class="sec-title">What I've <em>built.</em></h2>
   <div class="proj-drag-hint">Drag to explore · 7 projects</div>
   <div class="proj-scroll-outer">
-    <div class="proj-track" id="proj-track">
+    <div class="proj-track" id="proj-track" data-lenis-prevent data-lenis-prevent>
 
     <div class="proj-card" data-proj="0" role="button" tabindex="0" aria-label="View project details">
       <div class="proj-num">01</div>
@@ -4159,10 +4199,15 @@ nav, .section, .marquee-section, footer {
     if(el) el.setAttribute('data-lenis-prevent','');
   });
 
+  // Use native scroll on touch devices — smoother than JS-driven scroll
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
   const lenis = new Lenis({
-    lerp: 0.1,            // crisp premium glide — smooth but responsive
-    wheelMultiplier: 1,
-    smoothWheel: true
+    lerp: isTouchDevice ? 0 : 0.065,  // 0 = native on touch, smooth on desktop
+    wheelMultiplier: 0.85,
+    touchMultiplier: 2.0,
+    smoothWheel: !isTouchDevice,
+    smoothTouch: false,
+    infinite: false,
   });
   window.__lenis = lenis;
 
