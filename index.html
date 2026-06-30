@@ -2622,6 +2622,29 @@ body {
   .section { padding: 36px 16px !important; }
 }
 
+
+/* ====================================================
+   FIX: Stray line bleeding over Resume CTAs
+   Prevents pseudo elements / overlays from rendering
+   on top of the resume buttons.
+   ==================================================== */
+#resume {
+  position: relative;
+  z-index: 1;
+}
+#resume .btn {
+  position: relative;
+  z-index: 5;
+  isolation: isolate;
+}
+#resume > div[style*="display:flex"] {
+  position: relative;
+  z-index: 5;
+}
+/* Ensure section.visible animation doesn't leave artifacts */
+.section.visible::before,
+.section.visible::after { content: none !important; }
+
 </style>
 </head>
 <body>
@@ -4199,15 +4222,22 @@ body {
     if(el) el.setAttribute('data-lenis-prevent','');
   });
 
-  // Use native scroll on touch devices — smoother than JS-driven scroll
+  // Adaptive scroll: smooth on desktop, native on mobile/tablet
   const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
   const lenis = new Lenis({
-    lerp: isTouchDevice ? 0 : 0.065,  // 0 = native on touch, smooth on desktop
-    wheelMultiplier: 0.85,
+    duration: 1.0,                    // smoother glide curve
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),  // expo ease-out
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smooth: !isTouchDevice,           // disable on touch entirely
+    mouseMultiplier: 0.9,             // gentler wheel
+    smoothTouch: false,               // native scroll on phones
     touchMultiplier: 2.0,
-    smoothWheel: !isTouchDevice,
-    smoothTouch: false,
     infinite: false,
+    lerp: isTouchDevice ? 0 : 0.08,   // 0.08 = silky, slightly slower than crisp
+    syncTouch: false,
+    wheelMultiplier: 0.95,
+    normalizeWheel: true,             // smooth out wheel deltas across devices
   });
   window.__lenis = lenis;
 
