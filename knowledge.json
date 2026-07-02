@@ -1,0 +1,129 @@
+{
+  "name": "Varun Kumar R",
+  "role": "AI Engineer / Data Scientist (entry-level)",
+  "status": "Actively open to opportunities",
+  "location": "Liverpool, UK",
+
+  "education": [
+    {
+      "degree": "MSc in Data Science & Artificial Intelligence",
+      "school": "University of Liverpool, UK",
+      "years": "2025–2026",
+      "status": "In progress"
+    },
+    {
+      "degree": "B.Tech in Electronics & Communication Engineering (Data Science specialisation)",
+      "school": "SRM Institute of Science & Technology, Chennai",
+      "years": "2020–2024",
+      "status": "Completed"
+    }
+  ],
+
+  "experience": [
+    {
+      "role": "Python Intern",
+      "company": "Kaashiv InfoTech, Chennai",
+      "year": "2022",
+      "bullets": [
+        "Built Python automation scripts, improving data-entry efficiency by 30%",
+        "Designed small-scale ML prototypes to analyse structured data",
+        "Collaborated with senior developers to debug and optimise code"
+      ]
+    }
+  ],
+
+  "projects": [
+    {
+      "num": "01",
+      "title": "Telecom Customer Churn Prediction",
+      "metric": "86% accuracy",
+      "stack": ["Random Forest", "XGBoost", "Python", "Scikit-learn"],
+      "summary": "End-to-end ML pipeline predicting customer churn using Random Forest and XGBoost classifiers. Enables proactive retention strategies.",
+      "status": "Completed"
+    },
+    {
+      "num": "02",
+      "title": "Plant Disease Detection",
+      "metric": "~90% accuracy",
+      "stack": ["CNN", "TensorFlow", "Keras", "Computer Vision"],
+      "summary": "CNN-based image classification system detecting crop disease from leaf photographs. ~90% accuracy across multiple disease categories.",
+      "status": "Completed"
+    },
+    {
+      "num": "03",
+      "title": "Twitter Sentiment Analysis",
+      "metric": "82% F1-score",
+      "stack": ["NLP", "TF-IDF", "Scikit-learn", "Python", "NLTK"],
+      "summary": "NLP pipeline classifying 50,000+ tweets as positive, negative, or neutral for brand monitoring. 82% F1-score.",
+      "status": "Completed"
+    },
+    {
+      "num": "04",
+      "title": "IoT-Based Air Quality Monitoring",
+      "metric": "~90% accuracy",
+      "stack": ["IoT", "Machine Learning", "Python", "Regression"],
+      "summary": "Sensor-based system predicting pollution levels in real time using ML. Presented at a National Conference in 2024.",
+      "status": "Completed",
+      "highlight": "National Conference 2024"
+    },
+    {
+      "num": "05",
+      "title": "E-commerce Customer Segmentation",
+      "metric": "~85% accuracy",
+      "stack": ["K-Means", "Hierarchical Clustering", "PCA", "Scikit-learn"],
+      "summary": "Unsupervised ML segmenting customers into high-value groups. Boosted targeted marketing retention by 15-20%.",
+      "status": "Completed"
+    },
+    {
+      "num": "06",
+      "title": "AI Health Assistant Chatbot",
+      "metric": "Microsoft Phi-1.5",
+      "stack": ["Transformers", "Gradio", "Microsoft Phi-1.5", "HuggingFace", "Python", "LLM"],
+      "summary": "Conversational AI chatbot using Microsoft Phi-1.5 via HuggingFace with a Gradio web interface. Answers health queries with a fairness-enforcing system prompt. Deployed in Google Colab.",
+      "status": "Completed"
+    },
+    {
+      "num": "07",
+      "title": "Prompt Engineering for AI Language Models",
+      "metric": "In Progress",
+      "stack": ["LLMs", "Prompt Engineering", "NLP", "Evaluation", "Python"],
+      "summary": "MSc Dissertation (2025-2026). Investigating how prompt design shapes LLM behaviour, output quality and evaluation. Explores chain-of-thought, few-shot, zero-shot strategies and evaluation frameworks.",
+      "status": "In Progress"
+    }
+  ],
+
+  "skills": {
+    "Programming": ["Python", "SQL"],
+    "ML/AI Frameworks": ["TensorFlow", "Scikit-learn"],
+    "Visualisation": ["Power BI", "Tableau", "Matplotlib"],
+    "Libraries": ["Pandas", "NumPy"],
+    "Currently Learning": ["LLMs", "RAG pipelines", "Transformers", "MLOps", "Vector databases", "LangChain", "FastAPI"]
+  },
+
+  "certifications": [
+    "Data Science & AI Certification (6 months) — Boston Institute of Analytics",
+    "Python for Data Science & Machine Learning",
+    "Deep Learning in Neural Networks & AI with ChatGPT",
+    "Workshops in Power BI, RPA, and Big Data"
+  ],
+
+  "achievements": [
+    "Presented IoT Air Quality Monitoring at National Conference 2024",
+    "Symposium Coordinator, Abhigyan 2022, SRM University",
+    "Joint Treasurer, Rotaract Club of SRM Vadapalani (2021–2023)"
+  ],
+
+  "languages": [
+    {"lang": "English", "level": "Full Professional"},
+    {"lang": "Tamil", "level": "Native"}
+  ],
+
+  "contact": {
+    "email_professional": "varunr2510@gmail.com",
+    "email_official": "varunkumarrameshkumar085@gmail.com",
+    "email_personal": "varunzayne@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/varun-kumar-r-64a311325",
+    "phone_uk": "+44 7353 337073",
+    "phone_in": "+91 93848 28989"
+  }
+}
