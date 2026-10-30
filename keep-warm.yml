@@ -1,0 +1,23 @@
+name: Keep B.E.R.U backend warm
+
+# Render's free tier spins the backend down after ~15 min of inactivity,
+# which makes the first B.E.R.U message after idle take 30-60s (cold start).
+# This pings the backend every 10 minutes so it never fully sleeps.
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes (UTC)
+  workflow_dispatch: {}        # lets you run it manually from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping B.E.R.U backend
+        run: |
+          echo "Pinging B.E.R.U backend to keep it warm..."
+          # -m 90 gives a sleeping container time to wake. A failed ping is
+          # non-fatal: we never want this workflow to report a red X.
+          curl -sS -m 90 -o /dev/null -w "HTTP %{http_code} in %{time_total}s\n" \
+            "https://beru-backend-2szw.onrender.com/" \
+            || echo "Ping did not complete (non-fatal) - backend may be waking."
